@@ -17,7 +17,7 @@ public class Main {
         new Customer(8, "Hannah Arendt", "hannah@gmail.com"),
         new Customer(9, "Isaac Newton", "isaac@gmail.com"),
         new Customer(10, "Jane Austen", "jane@gmail.com")
-);
+    );
     
     private final OrderStore store;
     private Customer currentCustomer;
@@ -31,6 +31,7 @@ public class Main {
     
     public void start() {
         System.out.println("Welcome to the Order Management System!");
+        System.out.println();
         
         // Initial authentication
         if (!authenticate()) {
@@ -45,6 +46,7 @@ public class Main {
     private boolean authenticate() {
         System.out.println();
         System.out.println("Please enter your email to continue:");
+        System.out.print("> ");
         
         String email = scanner.nextLine().trim();
         
@@ -56,14 +58,15 @@ public class Main {
             return false;
         }
         
-        System.out.println("Welcome, " + currentCustomer.name() + "");
+        System.out.println();
+        System.out.println("Welcome, " + currentCustomer.name() + "!");
         return true;
     }
     
     private void mainLoop() {
         while (true) {
             System.out.println();
-            System.out.println("Main Menu:");
+            System.out.println(" Main Menu ");
             System.out.println("1. Specify Order");
             System.out.println("2. View total paid amount");
             System.out.println("3. Switch email account");
@@ -83,6 +86,7 @@ public class Main {
                     switchAccount();
                     break;
                 case "4":
+                    System.out.println();
                     System.out.println("Goodbye!");
                     return;
                 default:
@@ -125,9 +129,11 @@ public class Main {
     
     private void specifyOrder() {
         System.out.println();
-        System.out.println("Specify Order");
+        System.out.println(" Specify Order ");
         System.out.println("Current user: " + currentCustomer.name());
+        System.out.println();
         System.out.println("Enter order status (1 for PAID, 2 for UNPAID):");
+        System.out.print("> ");
         
         String statusChoice = scanner.nextLine().trim();
         
@@ -141,6 +147,7 @@ public class Main {
             : OrderStatusEnum.UNPAID;
         
         System.out.println("Enter order amount:");
+        System.out.print("> ");
         String amountInput = scanner.nextLine().trim();
         
         // Validate amount
@@ -159,7 +166,8 @@ public class Main {
         String orderId = store.addOrder(currentCustomer, amount, status);
         
         String statusText = status == OrderStatusEnum.PAID ? "paid" : "unpaid";
-        System.out.println("Order " + orderId + " (" + statusText + ", " + amountInput + ") added successfully!");
+        System.out.println();
+        System.out.println("Order " + orderId + " (" + statusText + ", $" + amountInput + ") added successfully!");
     }
     
     private void viewRevenue() {
@@ -172,7 +180,6 @@ public class Main {
         
         // Check if there are any paid orders
         if (report.entries().isEmpty()) {
-            System.out.println();
             System.out.println("No paid orders yet.");
             System.out.println("Total: 0.00");
             System.out.println();
@@ -183,11 +190,12 @@ public class Main {
         for (RevenueReport.Entry entry : report.entries()) {
             Customer customer = entry.customer();
             Money total = entry.total();
-            System.out.printf("%s — %.2f%n", customer.name(), total.amount().doubleValue());
+            System.out.printf("%s — $%.2f%n", customer.name(), total.amount().doubleValue());
         }
         
-        // Display grand total at the end
-        System.out.printf("Total — %.2f%n", report.grandTotal().amount().doubleValue());
+        // Display grand total at the end with a separator
+        System.out.println("----------------------------");
+        System.out.printf("Total — $%.2f%n", report.grandTotal().amount().doubleValue());
         System.out.println();
     }
     
