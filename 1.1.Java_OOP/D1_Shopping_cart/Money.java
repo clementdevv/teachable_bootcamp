@@ -11,7 +11,7 @@ public record Money(BigDecimal amount) {
         }
 
         if (amount.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("Money amount cannot be negative");
+            throw new IllegalArgumentException("-");
         }        
     }
 
